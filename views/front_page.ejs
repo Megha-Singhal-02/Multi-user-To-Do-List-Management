@@ -66,23 +66,25 @@
 						<% }); %>
 				</table>
 			</div>
-			<div class="add-button">
-				<form action="/add-list" method="get">
-					<button id="add-new-list">Add new List</button>
-				</form>
+			<div class="button-container">
+				<div class="add-button">
+					<form action="/add-list" method="get">
+						<button id="add-new-list">Add new List</button>
+					</form>
+					
+					<form action="/add-task" method="get" id="add-task-form">
+						<input type="hidden" name="listId" id="hidden-list-id">
+						<button id="add-new-task">Add new task</button>
+					</form>
+				</div>
+				<div class="delete-button">
+					<form action="/delete-list" method="post" id="delete-list-form">
+						<input type="hidden" id="delete-list-id" name="listId">
+						<button type="button" id="delete-list">Delete List</button>
+					</form>
 
-				<form action="/delete-list" method="post" id="delete-list-form">
-					<input type="hidden" id="delete-list-id" name="listId">
-					<button type="button" id="delete-list">Delete List</button>
-				</form>
-
-				<form action="/add-task" method="get" id="add-task-form">
-					<input type="hidden" name="listId" id="hidden-list-id">
-					<button id="add-new-task">Add new task</button>
-				</form>
-
-				<button type="button" id="delete-task">Delete Task</button>
-
+					<button type="button" id="delete-task">Delete Task</button>
+				</div>
 			</div>
 		</div>
 	</div>

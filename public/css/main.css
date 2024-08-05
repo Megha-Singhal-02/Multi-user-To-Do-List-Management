@@ -60,7 +60,7 @@ h1 {
 	width: 90%;
 	padding: 8px;
 	margin-bottom: 5px;
-	box-sizing: 3px;
+	box-sizing: border-box;
 }
 
 #gettinginfo button {
@@ -82,4 +82,39 @@ h1 {
 
 #gettinginfo a:hover {
 	color: green;
+}
+
+@media (max-width: 768px) {
+	.login-container {
+		flex-direction: column;
+	}
+
+	.left-side,
+	.right-side {
+		width: 100%;
+	}
+
+	.left-side img {
+		height: 200px;
+	}
+}
+
+@media (max-width: 480px) {
+	.right-side {
+		padding: 10px;
+	}
+
+	#gettinginfo {
+		width: 90%;
+	}
+
+	#gettinginfo input,
+	#gettinginfo button {
+		font-size: 14px;
+		padding: 8px;
+	}
+
+	h1 {
+		font-size: 24px;
+	}
 }
