@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 const path = require('path')
 const express = require('express');
 const app = express()
-const bcrypt = require('bcrypt')    //to make hashed password and check hashed password to make sure that our application is compelety secure
+const bcrypt = require('bcryptjs')    //to make hashed password and check hashed password to make sure that our application is compelety secure
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
