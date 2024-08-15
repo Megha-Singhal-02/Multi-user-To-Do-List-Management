@@ -5,7 +5,8 @@ const connection = mysql.createConnection({
 	user: process.env.DB_USER,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
-	port: 3307
+	port: 3306,
+	connectTimeout: 10000
 });
 
 connection.connect((error) => {
@@ -13,7 +14,7 @@ connection.connect((error) => {
 		console.log("Error: " + error);
 	}
 	else {
-		console.log("Connection Set up Finally");
+		// console.log("Connection Set up Finally");
 	}
 });
 

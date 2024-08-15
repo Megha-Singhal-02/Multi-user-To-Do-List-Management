@@ -33,8 +33,9 @@ app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,       //going to encrypt all information for us
   resave: false,      // resave our session variable if nothing is changed
-  saveUninitialized: false        //wants to save any empty value
+  saveUninitialized: true,       //wants to save any empty value
 }))
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
