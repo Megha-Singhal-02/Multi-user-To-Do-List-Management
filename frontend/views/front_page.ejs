@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie-edge">
+	<meta name="viewport" content="width= device-width initial-scale=1.0">
+	<title>To Do List</title>
+	<link rel="stylesheet" href="/css/front.css">
+</head>
+
+<body>
+	<header>
+		<div class="welcome-section">
+			<h3>Welcome <%= name %>!!</h3>
+			<div class="profile-icon">
+				<img src="/images/profile-image.png">
+				<div class="options">
+					<form action="/logout" method="post">
+						<button type="submit" class="sign-out">Sign Out</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="content">
+		<form action="/" method="get" id="list-form">
+			<label for="list">Choose an List of Tasks: </label>
+			<select name="list" id="list-option">
+				<option value="--select--" <% if(!selectedListId){ %> selected <% } %>>--select--</option>
+				<% todoLists.forEach(function(list) { %>
+					<option value="<%= list.id%>" <% if(list.id==selectedListId){ %> selected <% } %>><%= list.title%>
+					</option>
+					<% }); %>
+			</select>
+		</form>
+		<div class="table-and-adder">
+			<div class="table-list">
+				<table>
+					<tr id="table-head-row">
+						<th class="heading">Select</th>
+						<th class="heading">Task Name</th>
+						<th class="heading">Task Description</th>
+						<th class="heading">Completed By</th>
+						<th class="heading"></th>
+					</tr>
+					<% tasks.forEach(function(task) { %>
+						<tr>
+							<td class="data"><input type="checkbox" name="selectedTasks" value="<%= task.id %>"></td>
+							<td class="data">
+								<%= task.tasks_title %>
+							</td>
+							<td class="data">
+								<%= task.Description %>
+							</td>
+							<td class="data">
+								<%= new Date(task.completed_by).toLocaleDateString() %>
+							</td>
+							<td class="data">
+								<form action="/edit-task" method="get" style="display:inline;">
+									<input type="hidden" name="taskId" value="<%= task.id %>">
+									<button type="submit" class="edit-button">edit</button>
+								</form>
+							</td>
+						</tr>
+						<% }); %>
+				</table>
+			</div>
+			<div class="button-container">
+				<div class="add-button">
+					<form action="/add-list" method="get">
+						<button id="add-new-list">Add new List</button>
+					</form>
+					
+					<form action="/add-task" method="get" id="add-task-form">
+						<input type="hidden" name="listId" id="hidden-list-id">
+						<button id="add-new-task">Add new task</button>
+					</form>
+				</div>
+				<div class="delete-button">
+					<form action="/delete-list" method="post" id="delete-list-form">
+						<input type="hidden" id="delete-list-id" name="listId">
+						<button type="button" id="delete-list">Delete List</button>
+					</form>
+
+					<button type="button" id="delete-task">Delete Task</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		document.getElementById("list-option").addEventListener("change", function () {
+			document.getElementById("list-form").submit();
+		})
+
+		document.getElementById("add-new-list").addEventListener("click", function () {
+			window.location.href = "/add-list";
+		})
+
+		document.getElementById("add-new-task").addEventListener("click", function () {
+			const selectedListId = document.getElementById('list-option').value;
+			document.getElementById('hidden-list-id').value = selectedListId;
+			window.location.href = "/add-task";
+		})
+
+		document.getElementById("delete-list").addEventListener('click', function () {
+			var selectedListId = document.getElementById("list-option").value;
+			if (selectedListId === "--select--") {
+				alert("Please select a list to delete: ");
+				return;
+			}
+			document.getElementById("delete-list-id").value = selectedListId
+			if (confirm("Are you sure you want to delete this list? ")) {
+				document.getElementById("delete-list-form").submit();
+			}
+		})
+
+		document.getElementById("delete-task").addEventListener('click', function () {
+			var selectedListId = document.getElementById("list-option").value
+			if (selectedListId === '--select--') {
+				alert("Please select a list to delete their associated task: ")
+				return;
+			}
+
+			var selectedTasks = [];
+
+			document.querySelectorAll('input[type="checkbox"]:checked').forEach(function (checkbox) {
+				selectedTasks.push(checkbox.value);
+			})
+
+			if (selectedTasks.length === 0) {
+				alert("Please select at least one task for delete.")
+				return;
+			}
+
+			const form = document.createElement('form');
+			form.method = 'POST';
+			form.action = '/delete-task';
+
+			const listIdInput = document.createElement('input');
+			listIdInput.type = 'hidden';
+			listIdInput.name = 'listId';
+			listIdInput.value = selectedListId;
+			form.appendChild(listIdInput);
+
+			selectedTasks.forEach(function (taskId) {
+				var input = document.createElement("input");
+				input.type = 'hidden';
+				input.name = 'taskId';
+				input.value = taskId;
+				form.appendChild(input);
+			})
+			document.body.appendChild(form)
+			form.submit();
+		})
+
+	</script>
+</body>
+
+</html>

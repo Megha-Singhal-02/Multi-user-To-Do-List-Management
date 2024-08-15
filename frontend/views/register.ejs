@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+	<link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+	<div class="login-container">
+		<div class="left-side">
+			<img src="/images/image.jpg" alt="my image">
+		</div>
+		<div class="right-side">
+			<center>
+				<h1>Register</h1>
+			</center>
+			<div id="gettinginfo">
+				<form action="/register" method="post">
+					<label for="name">Name : </label>
+					<input type="text" id="name" name="name" placeholder="Enter your name" required>
+					<br>
+					<label for="email">E-Mail : </label>
+					<input type="email" id="email" name="email" placeholder="Enter your email" required>
+					<br>
+					<label for="password">Password : </label>
+					<input type="password" id="password" name="password" placeholder="Enter your password" required>
+					<button type="submit">Register</button>
+				</form>
+				<br>
+				<center>Already have an account? <a href="/login">Login</a></center>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

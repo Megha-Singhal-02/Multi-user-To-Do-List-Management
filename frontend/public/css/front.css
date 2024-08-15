@@ -1,0 +1,270 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #c9b8b8;
+	background-image: url('/images/image4.jpeg');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+header {
+	padding: 15px;
+	align-items: center;
+}
+
+.welcome-section {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.welcome-section h3 {
+	margin: 0;
+}
+
+.profile-icon {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+}
+
+.profile-icon img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.options {
+	position: absolute;
+	/* bottom: -90px; */
+	top: 100%;
+	right: 0;
+	background-color: #989595;
+	border: 2px solid #9b8787;
+	border-radius: 2px;
+	padding: 5px;
+	display: none;
+	z-index: 1;
+}
+
+.profile-icon:hover .options {
+	display: block;
+}
+
+.options button {
+	display: block;
+	padding: 5px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.options button:hover {
+	background-color: #d2cfcf;
+}
+
+.content {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.select-form {
+	font-size: 30px;
+	margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+select {
+	width: 200px;
+	margin-left: 8px;
+	padding: 4px;
+	font-size: 20px;
+	border: 2px solid #adacac;
+	border-radius: 5px;
+	color: #542424;
+	appearance: none;
+}
+
+select:hover,
+select:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.table-list {
+	margin: 0 auto;
+	margin-top: 7px;
+	width: 70%;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table th,
+table td {
+	border: 1px solid #f0efef;
+	padding: 8px;
+	text-align: center;
+}
+
+table th {
+	background-color: #adacac;
+}
+
+table td {
+	background-color: #bbb3b3;
+}
+
+.button-container {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	justify-content: center;
+}
+
+.add-button,
+.delete-button{
+	display: flex;
+	gap: 8px;
+}
+
+.add-button button,
+.add-button a,
+.delete-button button,
+.delete-button a {
+	margin-top: 10px;
+	padding: 10px 15px;
+	background-color: #c5c2c2;
+	color: #482eb0;
+	letter-spacing: 1px;
+	border: 1px solid #a49090;
+	border-radius: 20px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.add-button button:hover,
+.add-button a:hover,
+.delete-button button:hover,
+.delete-button a:hover {
+	background-color: #d6cfcf;
+	color: #9551b1;
+}
+
+.edit-button {
+	padding: 5px 8px;
+	font-size: 14px;
+	text-align: center;
+	text-decoration: underline;
+	color: #2270c3;
+	background-color: inherit;
+	border: none;
+	cursor: pointer;
+}
+
+.edit-button:hover {
+	color: #a90909;
+}
+
+@media (max-width: 768px) {
+	.welcome-section {
+		flex-direction: row;
+		align-items: flex-start;
+		margin-bottom: 40px;
+	}
+
+	.select-form {
+		font-size: 24px;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	select {
+		width: 150px;
+		padding: 4px 10px;
+		font-size: 18px;
+	}
+
+	.table-list {
+		margin-top: 5px;
+		width: 90%;
+	}
+
+	table th,
+	table td {
+		font-size: 14px;
+		padding: 6px;
+	}
+
+	.add-button button,
+	.add-button a,
+	.delete-button button,
+	.delete-button a {
+		font-size: 16px;
+		padding: 8px 12px;
+	}
+
+	.edit-button {
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 480px) {
+	header {
+		padding: 10px;
+	}
+
+	.welcome-section h3 {
+		font-size: 18px;
+	}
+
+	.select-form {
+		margin-top: 5px;
+		font-size: 20px;
+	}
+
+	select {
+		font-size: 16px;
+	}
+
+	table th,
+	table td {
+		font-size: 12px;
+		padding: 4px;
+	}
+
+	.add-button button,
+	.add-button a 
+	.delete-button button,
+	.delete-button a {
+		font-size: 14px;
+		padding: 7px 13px;
+	}
+
+	.edit-button {
+		font-size: 10px;
+	}
+
+	.profile-icon {
+		flex-direction: row;
+	}
+
+	.button-container{
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.add-button,
+	.delete-button{
+		width: 100%;
+		justify-content: center;
+	}
+}

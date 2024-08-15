@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie-edge">
+	<meta name="viewport" content="width= device-width initial-scale=1.0">
+	<title>Add New Task</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+			padding: 20px;
+		}
+
+		form {
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			width: 400px;
+			margin: 0 auto;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-weight: bold;
+		}
+
+		select,
+		input[type="text"],
+		input[type="date"],
+		input[type="submit"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			box-sizing: border-box;
+			margin-bottom: 20px;
+		}
+
+		input[type="submit"] {
+			background-color: #4caf50;
+			color: #fff;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #45a049;
+		}
+	</style>
+</head>
+
+<body>
+	<form action="/add-task" method="post">
+		<label for="listId">Select a list: </label>
+		<select id="listId" name="listId">
+			<% listNames.forEach(list=>{ %>
+				<option value="<%= list.id %>" <%=list.id==selectedListId ? 'selected' : '' %>><%= list.title %>
+				</option>
+				<% }); %>
+		</select>
+		<br>
+		<label for="taskname">Name of the Task</label>
+		<input type="text" id="taskname" name="taskname" required>
+		<br>
+		<label for="taskdescription">Description of the Task</label>
+		<input type="text" id="taskdescription" name="taskdescription">
+		<br>
+		<label for="tocomplete">Task to be completed by</label>
+		<input type="date" id="tocomplete" name="tocomplete">
+		<br>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+
+</html>
