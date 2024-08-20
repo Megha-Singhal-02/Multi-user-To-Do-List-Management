@@ -12,13 +12,14 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const mysql = require('mysql')
 const ejs = require('ejs')
+const MySQLStore = require('express-mysql-session')(session);
 
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.set('views', path.join(__dirname, '../frontend/views'))
 app.use(express.static('database'))
 
-const connection = require('./database/database.js');
+const { connection, sessionStore } = require('./database/database.js');
 
 const initializePassport = require('./config/passport-config.js')
 initializePassport(
@@ -33,7 +34,8 @@ app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,       //going to encrypt all information for us
   resave: false,      // resave our session variable if nothing is changed
-  saveUninitialized: true       //wants to save any empty value
+  saveUninitialized: false,       //wants to save any empty value
+  store: sessionStore
 }))
 
 app.use(passport.initialize())
@@ -43,20 +45,22 @@ app.use(methodOverride('_method'))
 //homepage route
 app.get('/', checkAuthenticated, (req, res) => {
   const userId = req.user.id;
-  const selectedListId = req.query.list;
+  const selectedListId = req.query.selectedListId;
 
   if (!selectedListId || selectedListId === '--select--') {
     connection.query('Select * from todo_lists where user_id = ? ', [userId], (error, lists) => {
       if (error) {
         console.log("Error in fetching todo lists: ", error)
+        res.render('front_page.ejs', { name: req.user.username, todoLists: [], tasks: [], selectedListId: null });
       }
       else {
         connection.query('Select * from tasks where todo_list_id IN (Select id from todo_lists where user_id = ? ) ', [userId], (error, tasks) => {
           if (error) {
             console.log("Error in fetching tasks: ", error)
+            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: [], selectedListId: null });
           }
           else {
-            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: selectedListId })
+            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: null })
           }
         })
       }
@@ -66,11 +70,13 @@ app.get('/', checkAuthenticated, (req, res) => {
     connection.query('Select * from todo_lists where user_id = ? ', [userId], (error, lists) => {
       if (error) {
         console.log("Error in fetching todo lists: ", error)
+        res.render('front_page.ejs', { name: req.user.username, todoLists: [], tasks: [], selectedListId: selectedListId });
       }
       else {
         connection.query('Select * from tasks where todo_list_id = ? and todo_list_id in (Select id from todo_lists where user_id = ?)', [selectedListId, userId], (error, tasks) => {
           if (error) {
             console.log('Error in displaying tasks for the list', error)
+            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: [], selectedListId: selectedListId });
           }
           else {
             res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: selectedListId })
@@ -156,11 +162,12 @@ app.post('/add-list', (req, res) => {
       }
       else {
         console.log("Data successfully inserted.")
-        res.redirect('/')
+        const newListId = result.insertId;
+        res.render('front_page.ejs', { todoLists: lists, selectedListId: newListId });
       }
-    })
+    });
   }
-  catch {
+  catch (error) {
     res.redirect('/add-list')
   }
 })
@@ -188,11 +195,11 @@ app.post('/add-task', (req, res) => {
     const completionDate = new Date(req.body.tocomplete);
     const formattedDate = completionDate.toISOString().split('T')[0];
     // console.log(formattedDate)
-    connection.query('Insert into tasks set ?', { 
-      todo_list_id: listId, 
-      tasks_title: taskName, 
-      Description: taskDescription, 
-      completed_by: formattedDate 
+    connection.query('Insert into tasks set ?', {
+      todo_list_id: listId,
+      tasks_title: taskName,
+      Description: taskDescription,
+      completed_by: formattedDate
     }, (error, result) => {
       if (error) {
         console.log('Error in inserting data into database: ', error)
@@ -256,7 +263,7 @@ app.get('/edit-task', (req, res) => {
       }
       else {
         const task = result[0];
-        const date = new Date(task.completed_by+'Z');
+        const date = new Date(task.completed_by + 'Z');
         // console.log('Date object:', date);
         const formattedDate = date.toISOString().split('T')[0];
         task.formattedDate = formattedDate;
@@ -280,6 +287,19 @@ app.post('/update-task', (req, res) => {
     }
     else {
       res.redirect('/')
+    }
+  })
+})
+
+app.post('/delete-task-direct', (req, res) => {
+  const taskId = req.body.taskId;
+
+  connection.query('Delete from tasks where id=?', [taskId], (err, result) => {
+    if (err) {
+      console.log("Error in deleting task: ", err)
+    }
+    else {
+      res.redirect('/');
     }
   })
 })

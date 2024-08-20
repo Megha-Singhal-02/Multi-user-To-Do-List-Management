@@ -1,4 +1,6 @@
 const mysql = require('mysql');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 
 const connection = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -18,6 +20,8 @@ connection.connect((error) => {
 	}
 });
 
+const sessionStore = new MySQLStore({},connection)
+
 connection.query("Select * from users", (error, result) => {
 	if (error) {
 		console.error("Error: ", error);
@@ -30,4 +34,4 @@ connection.query("Select * from todo_lists", (error, result) => {
 	}
 })
 
-module.exports = connection;
+module.exports = {connection, sessionStore};
