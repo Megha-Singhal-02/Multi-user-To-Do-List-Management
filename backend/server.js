@@ -163,7 +163,7 @@ app.post('/add-list', (req, res) => {
       else {
         console.log("Data successfully inserted.")
         const newListId = result.insertId;
-        res.render('front_page.ejs', { todoLists: lists, selectedListId: newListId });
+        res.redirect(`/?list=${newListId}`);
       }
     });
   }
