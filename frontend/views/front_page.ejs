@@ -27,7 +27,7 @@
 		<form action="/" method="get" id="list-form">
 			<label for="list">Choose an List of Tasks: </label>
 			<select name="list" id="list-option">
-				<option value="--select--" <% if(!selectedListId || selectedListId === '--select--'){ %> selected <% } %>>--select--</option>
+				<option value="--select--" <% if(!selectedListId){ %> selected <% } %>>--select--</option>
 				<% todoLists.forEach(function(list) { %>
 					<option value="<%= list.id%>" <% if(list.id==selectedListId){ %> selected <% } %>><%= list.title%>
 					</option>

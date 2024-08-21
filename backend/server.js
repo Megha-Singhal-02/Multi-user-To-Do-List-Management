@@ -45,22 +45,20 @@ app.use(methodOverride('_method'))
 //homepage route
 app.get('/', checkAuthenticated, (req, res) => {
   const userId = req.user.id;
-  const selectedListId = req.query.selectedListId;
+  const selectedListId = req.query.list;
 
   if (!selectedListId || selectedListId === '--select--') {
     connection.query('Select * from todo_lists where user_id = ? ', [userId], (error, lists) => {
       if (error) {
         console.log("Error in fetching todo lists: ", error)
-        res.render('front_page.ejs', { name: req.user.username, todoLists: [], tasks: [], selectedListId: null });
       }
       else {
         connection.query('Select * from tasks where todo_list_id IN (Select id from todo_lists where user_id = ? ) ', [userId], (error, tasks) => {
           if (error) {
             console.log("Error in fetching tasks: ", error)
-            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: [], selectedListId: null });
           }
           else {
-            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: null })
+            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: selectedListId })
           }
         })
       }
@@ -70,13 +68,11 @@ app.get('/', checkAuthenticated, (req, res) => {
     connection.query('Select * from todo_lists where user_id = ? ', [userId], (error, lists) => {
       if (error) {
         console.log("Error in fetching todo lists: ", error)
-        res.render('front_page.ejs', { name: req.user.username, todoLists: [], tasks: [], selectedListId: selectedListId });
       }
       else {
         connection.query('Select * from tasks where todo_list_id = ? and todo_list_id in (Select id from todo_lists where user_id = ?)', [selectedListId, userId], (error, tasks) => {
           if (error) {
             console.log('Error in displaying tasks for the list', error)
-            res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: [], selectedListId: selectedListId });
           }
           else {
             res.render('front_page.ejs', { name: req.user.username, todoLists: lists, tasks: tasks, selectedListId: selectedListId })
@@ -162,10 +158,10 @@ app.post('/add-list', (req, res) => {
       }
       else {
         console.log("Data successfully inserted.")
-        const newListId = result.insertId;
-        res.redirect(`/?list=${newListId}`);
+        
+        res.redirect('/')
       }
-    });
+    })
   }
   catch (error) {
     res.redirect('/add-list')
@@ -298,7 +294,7 @@ app.post('/delete-task-direct', (req, res) => {
     if (err) {
       console.log("Error in deleting task: ", err)
     }
-    else {
+    else{
       res.redirect('/');
     }
   })
