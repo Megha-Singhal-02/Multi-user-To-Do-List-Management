@@ -40,6 +40,9 @@ function initialize(passport, getUserByEmail,getUserById)
             {
                 return done(error);
             }
+            if (!results.length) {
+                return done(new Error('User not found'));
+            }
             return done(null, result[0]);
         });
     });
