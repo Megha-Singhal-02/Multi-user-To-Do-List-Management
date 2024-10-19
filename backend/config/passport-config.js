@@ -40,8 +40,8 @@ function initialize(passport, getUserByEmail,getUserById)
             {
                 return done(error);
             }
-            if (!result.length) {
-                return done(new Error('User not found'));
+            if (result.length===0) {
+                return done(null, false,{mesage: 'User not found'});
             }
             return done(null, result[0]);
         });
